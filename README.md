@@ -1,2 +1,3 @@
 # computer-eyes
- Computer vision methods
+
+A repo for the various methods of interpreting images and computer vision.
