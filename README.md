@@ -1,3 +1,5 @@
 # computer-eyes
 
-A repo for the various methods of interpreting images and computer vision.
+A repo for various planning and vision methods
+- interpreting images / computer vision
+- path planning and trajectories
