@@ -25,16 +25,16 @@ function bang_bang()
     if distAtMax >= 0 
         % time taken to travel distance possible at max velocity
         timeAtMax = distAtMax/max_vel;
+        fprintf("Reaches max velocity... time travelled at max velocity: %f seconds\n", timeAtMax);
     else 
         % does not reach max velocity
         timeAtMax = 0;
-        % this one only for any start vel, end vel = 0
-        % vel_peak = sqrt((total_distance*max_accel+0.5*vel_start^2));
         v_p = [1 -2*vel_end (total_distance*max_accel+0.5*(vel_start^2+vel_end^2))];
         r = roots(v_p);
         vel_peak = abs(r(1));
         timeToMax = (vel_peak-vel_start)/max_accel;
         timeFromMax = (vel_end-vel_peak)/(-max_accel);
+        fprintf("Does not reach max velocity\n");
     end
 
     % total time 
@@ -49,7 +49,7 @@ function outputs = getParams()
     prompt = {'Total distance (m)', 'Start velocity (m/s)', 'End velocity (m/s)', ... 
         'Max velocity (m/s)', 'Max acceleration (m/s^2)'}; % prompts for parameters
     dims = [1 50];
-    definput = {'1000', '0', '80', '80', '8'}; % default values
+    definput = {'1000', '0', '0', '80', '8'}; % default values
     dlgtitle = 'Parameters';
     dlg = inputdlg(prompt, dlgtitle, dims, definput); % open input prompt
     
