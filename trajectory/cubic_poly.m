@@ -21,6 +21,11 @@ function cubic_poly()
     t_start = params(1); t_end = params(2); t_value = params(3);
     pos_start = params(4); pos_end = params(5);
     vel_start = params(6); vel_end = params(7);
+    
+    fprintf("Received inputs...\n");
+    fprintf("Start time: %d\nEnd time: %d\nTime value: %d\n", t_start, t_end, t_value);
+    fprintf("Start position: %d\nEnd position: %d\n", pos_start, pos_end);
+    fprintf("Start velocity: %d\nEnd velocity: %d\n\n", vel_start, vel_end);
 
     % time array (default = 100 time points between t_start and t_end)
     t_arr = linspace(t_start, t_end);
