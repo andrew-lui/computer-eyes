@@ -5,16 +5,19 @@
 
 % Finds the values of x, v, and a at any user defined
 % time t_value which satisfies t_start <= t_value <= t_end
-% The user may also define the starting and end positions, and the
-% starting and end velocities
+% The user may define the starting and end positions, and the
+% starting and end velocities - otherwise it is set to default values
+% This function plots x, v, and a as a function of time, and labels
+% key data points. 
 
 function cubic_poly()
     clear; clc; clf;
     syms a0 a1 a2 a3
 
+    % call ui function to get parameters
     params = getParams();
     
-    % set params
+    % set parameter values
     t_start = params(1); t_end = params(2); t_value = params(3);
     pos_start = params(4); pos_end = params(5);
     vel_start = params(6); vel_end = params(7);
@@ -90,22 +93,26 @@ end
 function outputs = getParams()
     prompt = {'Start time (s)', 'End time (s)', 'Time value of interest (s)', ... 
         'Start position (m)', 'End position (m)', 'Start velocity (m/s)', ... 
-        'End velocity (m/s)'};
+        'End velocity (m/s)'}; % prompts for parameters
     dims = [1 50];
-    definput = {'0', '60', '20', '0', '100', '0', '0'};
+    definput = {'0', '60', '20', '0', '100', '0', '0'}; % default values
     dlgtitle = 'Parameters';
-    dlg = inputdlg(prompt, dlgtitle, dims, definput);
-    outputs = zeros(1, length(prompt));
+    dlg = inputdlg(prompt, dlgtitle, dims, definput); % open input prompt
     
-    % convert input to double 
+    % output array
+    outputs = zeros(1, length(prompt));
+    % [t_start, t_end, t_value, pos_start, pos_end, vel_start, vel_end]
+    
+    % extract inputs
     for i = 1:length(prompt)
-        val = str2double(dlg(i));
-        if isnan(val)
+        val = str2double(dlg(i)); % convert input value to double 
+        def = str2double(definput(i)); % convert default value to double
+        if isnan(val) % catch - NaN input
             fprintf("Non numeric input (%d) detected --- setting to default = %d\n", ...
-                i, str2double(definput(i)));
-            outputs(i) = str2double(definput(i));
+                i, def);
+            outputs(i) = def; % set to default value
         else
-            outputs(i) = val;
+            outputs(i) = val; % set to input value
         end
     end
 
