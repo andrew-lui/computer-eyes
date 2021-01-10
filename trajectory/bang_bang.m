@@ -44,7 +44,7 @@ function bang_bang()
     fprintf("Total time taken: %f\n\n", total_time);
     
     % time, position, velocity, acceleration arrays
-    t_arr = linspace(0,total_time);
+    t_arr = linspace(0,total_time, 500);
     x_arr = zeros(1, length(t_arr));
     v_arr = zeros(1, length(t_arr));
     a_arr = zeros(1, length(t_arr));
@@ -76,13 +76,19 @@ function bang_bang()
         
         % if not at v_max, update velocity
         if v_flag == 0
-            v_arr(i) = velocity(prev_vel, max_vel, a_arr(i), dt);
+            v_arr(i) = velocity(prev_vel, a_arr(i), dt);
         else
             v_arr(i) = max_vel;
         end
         
         % update position
         x_arr(i) = position(prev_pos, v_arr(i), dt);
+        
+        % last pos goal
+        if i == length(t_arr)
+            v_arr(i) = vel_end;
+            x_arr(i) = total_distance;
+        end
     end
     
     % max values of v and its position
@@ -91,6 +97,8 @@ function bang_bang()
     % array for displaying data points
     vt = v_max; vt_t = t_arr(v_max_idx);
     vt_str = {'\leftarrow v_{max}'};
+    xt = [0 total_distance]; xt_t = [0 length(t_arr)];
+    xt_str = {'\leftarrow x_{start}', '\leftarrow x_{end}'};
 
     % print statements
     fprintf("Max velocity: %f\n\n", v_max);
@@ -106,6 +114,7 @@ function bang_bang()
     figure(1)
     yyaxis left
     plot(t_arr, x_arr)
+    text(xt_t, xt, xt_str)
     hold on
     yyaxis right
     plot(t_arr, v_arr, t_arr, a_arr)
@@ -153,12 +162,9 @@ function outputs = getParams()
 end
 
 % function to calculate next velocity value
-function v_next = velocity(prev_vel, max_vel, accel, dt)
+function v_next = velocity(prev_vel, accel, dt)
     % formula for velocity
     v_next = prev_vel + accel * dt;
-    if v_next > max_vel 
-        v_next = max_vel;
-    end
 end
 
 % function to calculate next position value
