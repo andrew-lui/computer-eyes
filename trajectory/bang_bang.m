@@ -1,6 +1,8 @@
 % Bang Bang Trajectory (Minimum time)
 
 function bang_bang()
+    clear; clc; clf;
+
     % call ui function
     params = getParams();
     
@@ -39,9 +41,67 @@ function bang_bang()
 
     % total time 
     total_time = timeToMax + timeAtMax + timeFromMax;
-    
     fprintf("Total time taken: %f\n\n", total_time);
-
+    
+    % time, position, velocity, acceleration arrays
+    t_arr = linspace(0,total_time);
+    x_arr = zeros(1, length(t_arr));
+    v_arr = zeros(1, length(t_arr));
+    a_arr = zeros(1, length(t_arr));
+    
+    % iterate through time array 
+    for i = 1:length(t_arr)
+        % flag for max velocity - default false
+        v_flag = 0;
+        
+        if t_arr(i) <= timeToMax
+            a_arr(i) = max_accel;
+        elseif t_arr(i) <= (timeToMax+timeAtMax)
+            a_arr(i) = 0;
+            v_flag = 1;
+        else
+            a_arr(i) = -max_accel;
+        end
+        
+        % find prev_vel and dt
+        if i == 1
+            prev_vel = vel_start;
+            prev_pos = 0;
+            dt = t_arr(i);
+        else
+            prev_vel = v_arr(i-1);
+            prev_pos = x_arr(i-1);
+            dt = t_arr(i) - t_arr(i-1);
+        end
+        
+        % if not at v_max, update velocity
+        if v_flag == 0
+            v_arr(i) = velocity(prev_vel, max_vel, a_arr(i), dt);
+        else
+            v_arr(i) = max_vel;
+        end
+        
+        % update position
+        x_arr(i) = position(prev_pos, v_arr(i), dt);
+    end
+    
+    fprintf("Generating plot...\n");
+    
+    % show
+    figure(1)
+    yyaxis left
+    plot(t_arr, x_arr)
+    hold on
+%     text(t_value, x_value, '\leftarrow x_{value}')
+%     text(vt_t, vt, vt_str)
+    yyaxis right
+    plot(t_arr, a_arr, t_arr, v_arr)
+    grid on
+    title('Position, velocity and acceleration against time')
+    xlabel('Time (seconds)')
+%     text(at_t, at, at_str)
+%     xline(t_value, '--r')
+    legend('x(t)', 'v(t)', 'a(t)', 't_v_a_l_u_e', 'Location', 'east')
 end
 
 % ui function
@@ -49,7 +109,7 @@ function outputs = getParams()
     prompt = {'Total distance (m)', 'Start velocity (m/s)', 'End velocity (m/s)', ... 
         'Max velocity (m/s)', 'Max acceleration (m/s^2)'}; % prompts for parameters
     dims = [1 50];
-    definput = {'1000', '0', '0', '80', '8'}; % default values
+    definput = {'1000', '0', '0', '40', '8'}; % default values
     dlgtitle = 'Parameters';
     dlg = inputdlg(prompt, dlgtitle, dims, definput); % open input prompt
     
@@ -78,4 +138,19 @@ function outputs = getParams()
         outputs(3) = def;
     end
 
+end
+
+% function to calculate next velocity value
+function v_next = velocity(prev_vel, max_vel, accel, dt)
+    % formula for velocity
+    v_next = prev_vel + accel * dt;
+    if v_next > max_vel 
+        v_next = max_vel;
+    end
+end
+
+% function to calculate next position value
+function x_next = position(prev_pos, vel, dt)
+    % formula for position
+    x_next = prev_pos + vel * dt;
 end
