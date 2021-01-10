@@ -91,7 +91,7 @@ function cubic_poly()
     xlabel('Time (seconds)')
     text(at_t, at, at_str)
     xline(t_value, '--r')
-    legend('p(t)', 'v(t)', 'a(t)', 't_v_a_l_u_e', 'Location', 'east')
+    legend('x(t)', 'v(t)', 'a(t)', 't_v_a_l_u_e', 'Location', 'east')
 end
 
 % ui function
