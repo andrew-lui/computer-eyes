@@ -85,23 +85,35 @@ function bang_bang()
         x_arr(i) = position(prev_pos, v_arr(i), dt);
     end
     
-    fprintf("Generating plot...\n");
+    % max values of v and its position
+    [v_max, v_max_idx] = max(v_arr);
+
+    % array for displaying data points
+    vt = v_max; vt_t = t_arr(v_max_idx);
+    vt_str = {'\leftarrow v_{max}'};
+
+    % print statements
+    fprintf("Max velocity: %f\n\n", v_max);
+    if v_max == max_vel
+        fprintf("Max velocity was reached after %fs\n\n", t_arr(v_max_idx));
+    else
+        fprintf("Max velocity was not reached\n\n");
+    end
+    
+    fprintf("Generating plot...\nPosition values on the left y-axis\nVelocity and acceleration values on the right y-axis\n");
     
     % show
     figure(1)
     yyaxis left
     plot(t_arr, x_arr)
     hold on
-%     text(t_value, x_value, '\leftarrow x_{value}')
-%     text(vt_t, vt, vt_str)
     yyaxis right
-    plot(t_arr, a_arr, t_arr, v_arr)
+    plot(t_arr, v_arr, t_arr, a_arr)
     grid on
     title('Position, velocity and acceleration against time')
     xlabel('Time (seconds)')
-%     text(at_t, at, at_str)
-%     xline(t_value, '--r')
-    legend('x(t)', 'v(t)', 'a(t)', 't_v_a_l_u_e', 'Location', 'east')
+    text(vt_t, vt, vt_str)
+    legend('x(t)', 'v(t)', 'a(t)', 'Location', 'northwest')
 end
 
 % ui function
