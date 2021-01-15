@@ -11,6 +11,7 @@ origpts = np.float32([[56,65],[368,52],[28,387],[389,390]])           # four poi
 newpts = np.float32([[0,0],[300,0],[0,300],[300,300]])                # four points on the new image - a desired 300x300 image
 
 H = cv2.getPerspectiveTransform(origpts,newpts)                       # get the homography matrix
+print("Homography Matrix:")
 print(H)
 
 dst = cv2.warpPerspective(img, H, (300,300))                          # perform the perspective transform
