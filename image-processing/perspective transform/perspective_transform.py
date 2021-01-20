@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img = cv2.imread('sudoku.jpg')                                        # read image
+img = cv2.imread('..\images\sudoku.jpg')                                     # read image
 
 origpts = np.float32([[56,65],[368,52],[28,387],[389,390]])           # four points on the original image - manually obtained corners
 newpts = np.float32([[0,0],[300,0],[0,300],[300,300]])                # four points on the new image - a desired 300x300 image
